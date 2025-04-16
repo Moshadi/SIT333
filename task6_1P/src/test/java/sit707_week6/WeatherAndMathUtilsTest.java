@@ -13,7 +13,7 @@ public class WeatherAndMathUtilsTest {
 
     @Test
     public void testStudentName() {
-        String studentName = "W.A.D. Moshadi Hansamali";  // Update with your full name
+        String studentName = "W.A.D. Moshadi Hansamali";  
         Assert.assertNotNull("Student name is null", studentName);
     }
 
