@@ -1,33 +1,20 @@
 package sit707_tasks;
 
-/**
- * DateUtil class represents a simple utility to handle date increment and decrement operations.
- * It validates day, month, and year on creation and handles month/year rollovers appropriately.
- * Year must be between 1700 and 2024.
- */
 public class DateUtil {
-
-    private static final String[] MONTHS = {
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    };
 
     private int day;
     private int month;
     private int year;
 
-    /**
-     * Constructor with validation.
-     */
     public DateUtil(int day, int month, int year) {
         if (day < 1 || day > 31)
-            throw new RuntimeException("Invalid day: " + day);
+            throw new IllegalArgumentException("Invalid day: " + day);
         if (month < 1 || month > 12)
-            throw new RuntimeException("Invalid month: " + month);
+            throw new IllegalArgumentException("Invalid month: " + month);
         if (year < 1700 || year > 2024)
-            throw new RuntimeException("Invalid year: " + year);
+            throw new IllegalArgumentException("Invalid year: " + year);
         if (day > getDaysInMonth(month, year))
-            throw new RuntimeException("Invalid day: " + day + ", max day: " + getDaysInMonth(month, year));
+            throw new IllegalArgumentException("Invalid day: " + day + ", max allowed: " + getDaysInMonth(month, year));
 
         this.day = day;
         this.month = month;
@@ -35,9 +22,17 @@ public class DateUtil {
     }
 
     /** Accessor methods */
-    public int getDay() { return day; }
-    public int getMonth() { return month; }
-    public int getYear() { return year; }
+    public int getDay() {
+        return day;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public int getYear() {
+        return year;
+    }
 
     /**
      * Increments the date by one day.
@@ -45,13 +40,14 @@ public class DateUtil {
     public void increment() {
         if (day < getDaysInMonth(month, year)) {
             day++;
-        } else if (month < 12) {
-            day = 1;
-            month++;
         } else {
             day = 1;
-            month = 1;
-            year++;
+            if (month < 12) {
+                month++;
+            } else {
+                month = 1;
+                year++;
+            }
         }
     }
 
@@ -61,12 +57,13 @@ public class DateUtil {
     public void decrement() {
         if (day > 1) {
             day--;
-        } else if (month > 1) {
-            month--;
-            day = getDaysInMonth(month, year);
         } else {
-            month = 12;
-            year--;
+            if (month > 1) {
+                month--;
+            } else {
+                month = 12;
+                year--;
+            }
             day = getDaysInMonth(month, year);
         }
     }
@@ -93,10 +90,10 @@ public class DateUtil {
     }
 
     /**
-     * Returns a string representation of the date.
+     * Returns a string representation of the date (formatted as dd/MM/yyyy).
      */
     @Override
     public String toString() {
-        return day + " " + MONTHS[month - 1] + " " + year;
+        return String.format("%02d/%02d/%04d", day, month, year);
     }
 }
