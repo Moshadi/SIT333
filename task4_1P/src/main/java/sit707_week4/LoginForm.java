@@ -1,27 +1,33 @@
 package sit707_week4;
 
+/**
+ * Authenticates user based on username, password and validation code.
+ * @author Ahsan Habib
+ */
 public class LoginForm {
+	private static String USERNAME = "ahsan";
+	private static String PASSWORD = "ahsan_pass";
+	private static String VALIDATION_CODE = "123456";
 
-    private static String lastCode = null;
-
-    public static LoginStatus login(String username, String password) {
-        if (username == null || username.isEmpty()) {
-            return new LoginStatus(false, "Empty Username");
-        }
-
-        if (password == null || password.isEmpty()) {
-            return new LoginStatus(false, "Empty Password");
-        }
-
-        if (username.equals("admin") && password.equals("admin123")) {
-            lastCode = "123456"; 
-            return new LoginStatus(true, lastCode);
-        }
-
-        return new LoginStatus(false, "Credential mismatch");
-    }
-
-    public static boolean validateCode(String code) {
-        return code != null && code.equals(lastCode); 
-        }
+	public static LoginStatus login(String username, String password) {
+		if (username == null || username.length()==0) 
+			return new LoginStatus(false, "Empty Username");
+		
+		if (password == null || password.length()==0) 
+			return new LoginStatus(false, "Empty Password");
+		
+		if (!username.equals(USERNAME)) 
+			return new LoginStatus(false, "Credential mismatch");
+		
+		if (!password.equals(PASSWORD)) 
+			return new LoginStatus(false, "Credential mismatch");
+		
+		return new LoginStatus(true, VALIDATION_CODE);
+	}
+	
+	public static boolean validateCode(String code) {
+		if (code == null || code.length()==0 || !code.equals(VALIDATION_CODE)) 
+			return false;
+		return true;
+	}
 }
